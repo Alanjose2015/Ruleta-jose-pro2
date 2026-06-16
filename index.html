@@ -113,7 +113,7 @@
         let winner = Math.floor(angle / 10) + 1;
 
         // ✅ Si cae en prohibido → genera uno nuevo válido
-        const prohibidos = [13,21,33]; // tus números bloqueados
+        const prohibidos = [13,21,33,25,30]; // tus números bloqueados
         while (prohibidos.includes(winner)) {
             winner = Math.floor(Math.random() * 36) + 1;
         }
