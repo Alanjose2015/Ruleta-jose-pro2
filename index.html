@@ -71,7 +71,7 @@
         let currentRotation = 0;
 
         // 🔴 EDITA AQUÍ LOS NÚMEROS QUE NO QUIERES QUE SALGAN
-        const prohibidos = [13,21,33,10]; 
+        const prohibidos = [13,21]; 
 
         const sonidoRuleta = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-roulette-spin-1359.mp3');
 
@@ -97,38 +97,42 @@
         }
 
         function girar() {
-            if (localStorage.getItem('ya_jugo_pro')) return;
-            
-            sonidoRuleta.load();
-            sonidoRuleta.play().catch(e => {});
+    if (localStorage.getItem('ya_jugo_pro')) return;
+    
+    sonidoRuleta.load();
+    sonidoRuleta.play().catch(e => {});
 
-            spinBtn.disabled = true;
-            const extra = Math.floor(Math.random() * 360);
-            currentRotation += 1800 + extra;
-            wheel.style.transform = `rotate(${currentRotation}deg)`;
+    spinBtn.disabled = true;
+    const extra = Math.floor(Math.random() * 360);
+    currentRotation += 1800 + extra;
+    wheel.style.transform = `rotate(${currentRotation}deg)`;
 
-            setTimeout(() => {
-                sonidoRuleta.pause();
-                const angle = (360 - (currentRotation % 360)) % 360;
-                let winner = Math.floor(angle / 10) + 1;
+    setTimeout(() => {
+        sonidoRuleta.pause();
+        const angle = (360 - (currentRotation % 360)) % 360;
+        let winner = Math.floor(angle / 10) + 1;
 
-                // Si cae en prohibido, cambia automáticamente
-                if (prohibidos.includes(winner)) winner = numeroValido();
-
-                // 📢 MENSAJE GANAR / PERDER
-                if(winner % 2 === 0){ // Ejemplo: pares = ganas
-                    mensaje.textContent = "✅ ¡GANASTE! Número: "+winner;
-                    mensaje.style.color="#25D366";
-                }else{
-                    mensaje.textContent = "❌ PERDISTE. Fue: "+winner;
-                    mensaje.style.color="#ff4444";
-                }
-
-                guardar(winner);
-                localStorage.setItem('ya_jugo_pro', 'true');
-                bloquearBoton();
-            }, 5000);
+        // ✅ Si cae en prohibido → genera uno nuevo válido
+        const prohibidos = [13,21,33]; // tus números bloqueados
+        while (prohibidos.includes(winner)) {
+            winner = Math.floor(Math.random() * 36) + 1;
         }
+
+        // ✅ Ahora el mensaje coincide EXACTO con el número real
+        if(winner % 2 === 0){
+            mensaje.textContent = "✅ ¡GANASTE! Número: "+winner;
+            mensaje.style.color="#25D366";
+        }else{
+            mensaje.textContent = "❌ PERDISTE. Fue: "+winner;
+            mensaje.style.color="#ff4444";
+        }
+
+        guardar(winner);
+        localStorage.setItem('ya_jugo_pro', 'true');
+        bloquearBoton();
+    }, 5000);
+}
+
 
         function bloquearBoton() {
             spinBtn.disabled = true;
@@ -156,5 +160,5 @@
         }
     </script>
 </body>
-</html>
-
+    </html>
+    
